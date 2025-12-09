@@ -1,0 +1,5 @@
+export { default as ArrowLeftIcon } from './ArrowLeftIcon'
+export { default as CheckIcon } from './CheckIcon'
+export { default as MenuIcon } from './MenuIcon'
+export { default as SearchIcon } from './SearchIcon'
+export { default as SoundIcon } from './SoundIcon'

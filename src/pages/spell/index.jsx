@@ -27,7 +27,28 @@ export default function Spell() {
 
     const wordId = card?.id
     if (wordId) {
-      apiClient.patch(`/word/${wordId}`, { correct });
+      apiClient.patch(`/word/${wordId}`, { correct }).catch(() => {
+        // 실패해도 흐름 유지
+      })
+    }
+  }
+
+  const handleToggleBookmark = async () => {
+    if (!card) return
+    const wordId = card?.id
+    if (!wordId) return
+
+    const next = !card.isBookmarked
+    setCards((prev) =>
+      prev.map((item, idx) => (idx === cardIndex ? { ...item, isBookmarked: next } : item)),
+    )
+
+    try {
+      await apiClient.patch(`/word/${wordId}/bookmark`, { bookmarked: next })
+    } catch (err) {
+      setCards((prev) =>
+        prev.map((item, idx) => (idx === cardIndex ? { ...item, isBookmarked: !next } : item)),
+      )
     }
   }
 
@@ -175,7 +196,17 @@ export default function Spell() {
           <div className="flex h-1/2 w-full flex-col border-b border-gray-200">
             <div className="flex items-center justify-between px-5 py-4 text-sm font-semibold text-textMain">
               <SoundIcon height="24" width="24" className="cursor-pointer" />
-              <StarIcon className="h-6 w-6 text-[#f0c94f]" fill="#f0c94f" />
+              <button
+                type="button"
+                onClick={handleToggleBookmark}
+                className="p-1 transition hover:scale-105"
+                aria-label={card.isBookmarked ? '즐겨찾기 해제' : '즐겨찾기 추가'}
+              >
+                <StarIcon
+                  className={`h-6 w-6 ${card.isBookmarked ? 'text-[#f0c94f]' : 'text-textMain'}`}
+                  fill={card.isBookmarked ? '#f0c94f' : 'none'}
+                />
+              </button>
               <span className="text-gray-400">학습중...</span>
             </div>
             <div className="flex flex-1 items-center justify-center px-6">

@@ -24,6 +24,11 @@ export default function Spell() {
     const correct = normalize(answerInput) === normalize(card.wordEng)
     setIsCorrect(correct)
     setIsResult(true)
+
+    const wordId = card?.id
+    if (wordId) {
+      apiClient.patch(`/word/${wordId}`, { correct });
+    }
   }
 
   const handleNext = () => {

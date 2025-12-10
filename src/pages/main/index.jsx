@@ -8,7 +8,7 @@ const navItems = [
 ]
 
 const recentSets = [
-  { title: '2학년 2학기 5회 영어 시험 대비', count: '50 카드', link: '/spell' },
+  { title: '2학년 2학기 5회 영어 시험 대비', count: '50 카드', link: '/words' },
   { title: '2025학년도 2학년 2학기 어휘 시험 범위 (1회)', count: '50 카드', link: '/'  },
   { title: '2025학년도 2학년 2학기 어휘 시험 범위 (5회)', count: '50 카드', link: '/'  },
   { title: "Barron\u2019s 600 words for the TOEIC - Hotels", count: '30 카드', link: '/'  },
@@ -85,25 +85,6 @@ export default function Main() {
               <FolderRow label="만든 세트" />
             </div>
           </section>
-
-            <section className="rounded-2xl bg-white p-5 shadow-sm">
-                <div className="text-sm font-bold text-[#3a3d42]">오답률 TOP 5 단어</div>
-                <ul className="mt-3 space-y-2 text-sm text-[#4d5055]">
-                    {['available', 'provide', 'result', 'important', 'experience'].map((word, idx) => (
-                        <li
-                            key={word}
-                            className="flex items-center justify-between rounded-lg px-2 py-1.5 hover:bg-[#f6f7f9]"
-                        >
-                            <div className="flex items-center gap-2">
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#eef5e9] text-xs font-semibold text-[#64ad2b]">
-                        {idx + 1}
-                      </span>
-                                <span className="font-semibold capitalize">{word}</span>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </section>
         </aside>
 
         <section className="flex-1 space-y-5">

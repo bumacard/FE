@@ -10,9 +10,6 @@ export default {
         primaryAccent: '#9a81ff',
         textMain: '#2c2d31',
       },
-      boxShadow: {
-        card: '0 16px 40px rgba(0, 0, 0, 0.25)',
-      },
     },
   },
   plugins: [],

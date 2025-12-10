@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
-import Spell from './pages/Spell/Spell'
-import Main from "./pages/Main/index.jsx";
+import Spell from './pages/spell/index.jsx'
+import Main from "./pages/main/index.jsx";
 
 function App() {
   return (

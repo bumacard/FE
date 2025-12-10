@@ -2,26 +2,26 @@ import { useEffect, useMemo, useState } from 'react'
 import { CheckIcon, SoundIcon, StarIcon } from '../../components/icon'
 import { normalize } from '../../utils/index.js'
 import SpellHeader from '../../components/spell/SpellHeader/index.jsx'
+import apiClient from '../../api/instance.js'
 
 export default function Spell() {
-  const cards = [
-    { question: '명소', answer: 'landmark', isBookmarked: false },
-    { question: '영구적으로', answer: 'permanently', isBookmarked: false },
-  ]
-
-  const total = cards.length || 0
+  const [cards, setCards] = useState([])
+  const total = cards.length
   const [started, setStarted] = useState(false)
   const [isResult, setIsResult] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
   const [cardIndex, setCardIndex] = useState(0)
   const [answerInput, setAnswerInput] = useState('')
   const [isFinished, setIsFinished] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  const card = useMemo(() => cards[cardIndex] ?? cards[0], [cardIndex])
+  const card = useMemo(() => cards[cardIndex] ?? cards[0], [cardIndex, cards])
   const isLastCard = cardIndex === cards.length - 1
 
   const handleSubmit = () => {
-    const correct = normalize(answerInput) === normalize(card.answer)
+    if (!card) return
+    const correct = normalize(answerInput) === normalize(card.wordEng)
     setIsCorrect(correct)
     setIsResult(true)
   }
@@ -49,6 +49,33 @@ export default function Spell() {
   }
 
   useEffect(() => {
+    const fetchCards = async () => {
+      setIsLoading(true)
+      setError('')
+      try {
+        const response = await apiClient.get('/word')
+        const payload = Array.isArray(response?.data) ? response.data : response?.data?.data || []
+        setCards(payload)
+      } catch (err) {
+        setError('단어를 불러오지 못했습니다.\n: ' + err.message)
+        setCards([])
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchCards()
+  }, [])
+
+  useEffect(() => {
+    setCardIndex(0)
+    setIsFinished(false)
+    setIsResult(false)
+    setIsCorrect(false)
+    setAnswerInput('')
+  }, [cards])
+
+  useEffect(() => {
     const onKeyDown = (event) => {
       if (isFinished && event.code === 'Space') {
         event.preventDefault()
@@ -61,6 +88,18 @@ export default function Spell() {
   }, [isFinished])
 
   const renderContent = () => {
+    if (isLoading) {
+      return <div className="text-sm text-gray-300">단어를 불러오는 중...</div>
+    }
+
+    if (error) {
+      return <div className="text-sm font-semibold text-red-400">{error}</div>
+    }
+
+    if (!cards.length) {
+      return <div className="text-sm text-gray-300">카드가 없습니다.</div>
+    }
+
     if (!started) {
       return (
         <button
@@ -135,7 +174,7 @@ export default function Spell() {
               <span className="text-gray-400">학습중...</span>
             </div>
             <div className="flex flex-1 items-center justify-center px-6">
-              <h1 className="text-center text-[32px] font-bold leading-tight text-textMain">{card.question}</h1>
+              <h1 className="text-center text-[32px] font-bold leading-tight text-textMain">{card.wordKor}</h1>
             </div>
           </div>
 
@@ -144,13 +183,13 @@ export default function Spell() {
               <div className="w-4/5 space-y-3">
                 <input
                   className="w-full rounded-md border border-gray-200 bg-[#ededed] px-4 py-3 text-base text-textMain placeholder:text-[#a0a0b2] focus:outline-none"
-                  value={isCorrect ? card.answer : ''}
+                  value={answerInput}
                   readOnly
                   placeholder="정답은 줄바꿈 없이 1줄로 입력하세요."
                 />
                 <div className="flex items-center gap-3 text-sm font-semibold">
                   <span className="rounded-full bg-[#71be3c] px-3 py-1 text-white">정답</span>
-                  <span className="text-[#71be3c]">{card.answer}</span>
+                  <span className="text-[#71be3c]">{card.wordEng}</span>
                 </div>
               </div>
             ) : (

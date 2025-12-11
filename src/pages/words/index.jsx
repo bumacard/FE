@@ -151,7 +151,7 @@ export default function WordsPage() {
             <div className="flex flex-wrap items-center gap-2">
               <ActionPill label="암기학습" />
               <ActionPill label="리콜학습" />
-              <ActionPill label="스펠학습" />
+              <a href="/words/spell"><ActionPill label="스펠학습" /></a>
             </div>
           </div>
         </section>

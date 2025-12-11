@@ -39,7 +39,7 @@ export default function WordsPage() {
         <div className="mx-auto flex max-w-6xl items-center px-6 py-3">
           <button
             type="button"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/')}
             className="flex items-center gap-2 text-[#4d5055] transition hover:text-[#8d6cf6]"
             aria-label="뒤로가기"
           >
@@ -152,6 +152,7 @@ export default function WordsPage() {
               <ActionPill label="암기학습" />
               <ActionPill label="리콜학습" />
               <a href="/words/spell"><ActionPill label="스펠학습" /></a>
+                <a href="/speed"><ActionPill label="스피드테스트" /></a>
             </div>
           </div>
         </section>

@@ -1,5 +1,5 @@
 const normalize = (value) => {
-    return value.trim().toLowerCase()
+  return (value ?? '').toString().trim().toLowerCase()
 }
 
 export default normalize
